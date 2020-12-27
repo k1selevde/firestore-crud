@@ -10,14 +10,12 @@ function App() {
 
 
   useEffect(() => {
-      const fetchData = async () => {
-          const db = firebase.firestore()
-          const data = await db.collection("subjects").get()
-          setSubjects(data.docs.map(doc => ({...doc.data(), id: doc.id})))
-      }
-
-      fetchData();
-
+      const db = firebase.firestore()
+      return db.collection("subjects").onSnapshot(snapshot => {
+          const subjectsData = [];
+          snapshot.forEach(doc => subjectsData.push({...doc.data(), id: doc.id }));
+          setSubjects(subjectsData)
+      })
   }, [])
 
 
